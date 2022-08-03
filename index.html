@@ -1,0 +1,201 @@
+<html lang="pt-br"><head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Caça-Palavras</title>
+	<style>
+		table, tr, td{
+			border:1px solid;
+		}
+		.marcado{
+			background-color:lightblue;
+			transition:.5s linear;
+		}
+		.encontrada{
+			background-color:lightgreen;
+		}
+	</style>
+</head>
+
+<body>
+	<p id="encontradas">Feito por:Marcus Vinycius e Paulo André</p>
+	<table id="tabuleiro">
+		<tbody><tr id="0">
+			<td id="0">A</td>
+			<td id="1">I</td>
+			<td id="2">A</td>
+			<td id="3">P</td>
+			<td id="4">O</td>
+			<td id="5">L</td>
+			<td id="6">U</td>
+			<td id="7">I</td>
+			<td id="8">C</td>
+			<td id="9">A</td>
+			<td id="10">O</td>
+		</tr>
+		<tr id="1">
+			<td id="0">M</td>
+			<td id="1">C</td>
+			<td id="2">F</td>
+			<td id="3">E</td>
+			<td id="4">D</td>
+			<td id="5">O</td>
+			<td id="6">M</td>
+			<td id="7">Q</td>
+			<td id="8">H</td>
+			<td id="9">Y</td>
+			<td id="10">R</td>
+		</tr>
+		<tr id="2">
+			<td id="0">A</td>
+			<td id="1">R</td>
+			<td id="2">L</td>
+			<td id="3">J</td>
+			<td id="4">I</td>
+			<td id="5">V</td>
+			<td id="6">E</td>
+			<td id="7">U</td>
+			<td id="8">D</td>
+			<td id="9">E</td>
+			<td id="10">F</td>
+		</tr>
+		<tr id="3">
+			<td id="0">Z</td>
+			<td id="1">B</td>
+			<td id="2">O</td>
+			<td id="3">L</td>
+			<td id="4">Y</td>
+			<td id="5">H</td>
+			<td id="6">N</td>
+			<td id="7">E</td>
+			<td id="8">I</td>
+			<td id="9">U</td>
+			<td id="10">E</td>
+		</tr>
+		<tr id="4">
+			<td id="0">O</td>
+			<td id="1">N</td>
+			<td id="2">R</td>
+			<td id="3">R</td>
+			<td id="4">A</td>
+			<td id="5">H</td>
+			<td id="6">F</td>
+			<td id="7">I</td>
+			<td id="8">E</td>
+			<td id="9">O</td>
+			<td id="10">R</td>
+		</tr>
+		<tr id="5">
+			<td id="0">N</td>
+			<td id="1">M</td>
+			<td id="2">A</td>
+			<td id="3">K</td>
+			<td id="4">C</td>
+			<td id="5">F</td>
+			<td id="6">N</td>
+			<td id="7">M</td>
+			<td id="8">A</td>
+			<td id="9">N</td>
+			<td id="10">Q</td>
+		</tr>
+		<tr id="6">
+			<td id="0">I</td>
+			<td id="1">S</td>
+			<td id="2">T</td>
+			<td id="3">I</td>
+			<td id="4">R</td>
+			<td id="5">E</td>
+			<td id="6">B</td>
+			<td id="7">A</td>
+			<td id="8">U</td>
+			<td id="9">S</td>
+			<td id="10">F</td>
+		</tr>
+		<tr id="7">
+			<td id="0">A</td>
+			<td id="1">S</td>
+			<td id="2">F</td>
+			<td id="3">N</td>
+			<td id="4">A</td>
+			<td id="5">T</td>
+			<td id="6">U</td>
+			<td id="7">R</td>
+			<td id="8">E</td>
+			<td id="9">Z</td>
+			<td id="10">A</td>
+		</tr>
+	</tbody></table>
+	<script>
+		var t = document.getElementById("tabuleiro");
+		var cores = ["POLUICAO", "NATUREZA", "QUEIMAR", "AMAZONIA", "FLORA"];
+		var primeiroclique = false;
+		var encontradas = 0;
+		var data = {};
+		function clique(e){
+			if(primeiroclique == false){
+				console.log("coluna "+e.target.id);
+				console.log("linha "+e.target.parentElement.id);
+				console.log("letra "+e.target.innerText);
+				
+				data.colunainicial = parseInt(e.target.id);
+				data.linhainicial = parseInt(e.target.parentElement.id);
+				data.letrainicial = e.target.innerText;
+				
+				e.target.style.backgroundColor = "lightblue";
+				
+				primeiroclique = true;
+			}else{
+				console.log("coluna "+e.target.id);
+				console.log("linha "+e.target.parentElement.id);
+				console.log("letra "+e.target.innerText);
+			
+				data.colunafinal = parseInt(e.target.id);
+				data.linhafinal = parseInt(e.target.parentElement.id);
+				data.letrafinal = e.target.innerText;
+				
+				e.target.style.backgroundColor = "lightblue";
+				
+				comparar(data);
+				primeiroclique = false;
+			}
+		}
+		function comparar(data){
+			var palavra = "";
+			if(data.colunainicial != data.colunafinal && data.linhainicial == data.linhafinal){
+				console.log("seleção horizontal");
+				for(var i = data.colunainicial; i < data.colunafinal + 1; i++){
+					var td = t.rows[data.linhainicial].cells[i];
+					td.classList.add("marcado");
+					palavra += td.innerText;
+				}
+			}else if(data.colunainicial == data.colunafinal && data.linhainicial != data.linhafinal){
+				console.log("seleção vertical");
+				for(var i = data.linhainicial; i < data.linhafinal + 1; i++){
+					var td = t.rows[i].cells[data.colunainicial];
+					td.classList.add("marcado");
+					palavra += td.innerText;
+				}
+			}
+			if(cores.includes(palavra)){
+				cores = cores.filter(function(p){
+					if(palavra != p){
+						return p;
+					}
+				});
+				encontradas += 1;
+				document.getElementById("encontradas").innerText = "Encontradas: "+encontradas;
+				data = {};
+			}else{
+				data = {};
+			}
+		}
+		for(var i = 0; i < t.rows.length; i++){
+			t.rows[i].id = i;
+			for(var j = 0; j < t.rows[i].cells.length; j++){
+				t.rows[i].cells[j].id = j;
+				t.rows[i].cells[j].addEventListener("click", clique);
+			}
+		}
+	</script>
+
+
+</body></html>
